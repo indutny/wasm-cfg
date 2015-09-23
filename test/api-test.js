@@ -51,7 +51,7 @@ describe('wasm-cfg', function() {
     */}, function() {/*
       pipeline 0 {
         b0 {
-          i0 = ret
+          i0 = ret ^b0
         }
       }
     */});
