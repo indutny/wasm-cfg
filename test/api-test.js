@@ -44,19 +44,6 @@ describe('wasm-cfg', function() {
     */});
   });
 
-  it('should add implict ret', function() {
-    test(function() {/*
-      void op() {
-      }
-    */}, function() {/*
-      pipeline 0 {
-        b0 {
-          i0 = ret ^b0
-        }
-      }
-    */});
-  });
-
   it('should do not allow return from void', function() {
     assert.throws(function() {
       test(function() {/*
