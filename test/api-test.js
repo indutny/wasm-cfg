@@ -1,5 +1,6 @@
 'use strict';
 
+var assert = require('assert');
 var assertText = require('assert-text');
 assertText.options.trim = true;
 var fixtures = require('./fixtures');
@@ -41,5 +42,49 @@ describe('wasm-cfg', function() {
         }
       }
     */});
+  });
+
+  it('should do not allow return from void', function() {
+    assert.throws(function() {
+      test(function() {/*
+        void op(i64 a) {
+          return a;
+        }
+      */}, function() {/*
+      */});
+    }, /Return from `void`/);
+  });
+
+  it('should check return type', function() {
+    assert.throws(function() {
+      test(function() {/*
+        i32 op(i64 a) {
+          return a;
+        }
+      */}, function() {/*
+      */});
+    }, /Mismatched param type/);
+  });
+
+  it('should check builtin result type', function() {
+    assert.throws(function() {
+      test(function() {/*
+        i32 op(i64 a, i64 b) {
+          return i64.mul(a, b);
+        }
+      */}, function() {/*
+      */});
+    }, /Builtin return type mismatch/);
+  });
+
+  it('should check builtin arg type', function() {
+    assert.throws(function() {
+      test(function() {/*
+        i64 op(i64 a, i32 b) {
+          return i64.mul(a, b);
+        }
+      */}, function() {/*
+      */});
+    }, /Mismatched param type/);
   });
 });
