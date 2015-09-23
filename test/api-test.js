@@ -38,7 +38,7 @@ describe('wasm-cfg', function() {
           i2 = i64.add i0, i1
           i3 = i64.const 1
           i4 = i64.mul i2, i3
-          i5 = i64.ret i4
+          i5 = i64.ret ^b0, i4
         }
       }
     */});
