@@ -1,0 +1,34 @@
+{
+  "name": "wasm-cfg",
+  "version": "1.0.0",
+  "description": "WebAssembly AST->CFG translator",
+  "main": "lib/wasm-cfg.js",
+  "scripts": {
+    "test": "mocha --reporter=spec test/*-test.js && jscs lib/**/*.js lib/*.js test/*.js && jshint lib/**/*.js lib/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/indutny/wasm-cfg.git"
+  },
+  "keywords": [
+    "Web",
+    "Assembly",
+    "wasm",
+    "CFG"
+  ],
+  "author": "Fedor Indutny <fedor@indutny.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/indutny/wasm-cfg/issues"
+  },
+  "homepage": "https://github.com/indutny/wasm-cfg#readme",
+  "devDependencies": {
+    "assert-text": "^1.1.2",
+    "jscs": "^2.1.1",
+    "jshint": "^2.8.0",
+    "mocha": "^2.3.3"
+  },
+  "dependencies": {
+    "json-pipeline": "^2.7.0"
+  }
+}
