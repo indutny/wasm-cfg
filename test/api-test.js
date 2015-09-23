@@ -28,7 +28,7 @@ describe('wasm-cfg', function() {
   it('should construct linear CFG', function() {
     test(function() {/*
       i64 op(i64 a, i64 b) {
-        return i64.mul(i64.add(a, b), b);
+        return i64.mul(i64.add(a, b), i64.const(1));
       }
     */}, function() {/*
       pipeline 0 {
@@ -36,7 +36,7 @@ describe('wasm-cfg', function() {
           i0 = i64.param 0
           i1 = i64.param 1
           i2 = i64.add i0, i1
-          i3 = i64.param 1
+          i3 = i64.const 1
           i4 = i64.mul i2, i3
           i5 = i64.ret i4
         }
