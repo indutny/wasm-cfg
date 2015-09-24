@@ -157,4 +157,58 @@ describe('wasm-cfg', function() {
       }
     */});
   });
+
+  it('should support IfStatement', function() {
+    test(function() {/*
+      i64 op(i64 a, i64 b) {
+        i64 r;
+        if (a) {
+          if (b)
+            r = i64.const(1);
+        } else {
+          r = i64.const(2);
+        }
+        return r;
+      }
+    */}, function() {/*
+      pipeline 0 {
+        b0 {
+          i0 = i64.param 0
+          i1 = i64.bool i0
+          i2 = if ^b0, i1
+        }
+        b0 -> b1, b5
+        b1 {
+          i3 = i64.param 1
+          i4 = i64.bool i3
+          i5 = if ^b1, i4
+        }
+        b1 -> b2, b3
+        b2 {
+          i6 = i64.const 1
+          i7 = ssa:store 0, i6
+          i8 = jump ^b2
+        }
+        b2 -> b4
+        b3 {
+          i9 = jump ^b3
+        }
+        b3 -> b4
+        b4 {
+          i10 = jump ^b4
+        }
+        b4 -> b6
+        b5 {
+          i11 = i64.const 2
+          i12 = ssa:store 0, i11
+          i13 = jump ^b5
+        }
+        b5 -> b6
+        b6 {
+          i14 = ssa:load 0
+          i15 = i64.ret ^b6, i14
+        }
+      }
+    */});
+  });
 });
