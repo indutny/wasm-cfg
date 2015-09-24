@@ -87,4 +87,20 @@ describe('wasm-cfg', function() {
       */});
     }, /Mismatched param type/);
   });
+
+  it('should check builtin arg type', function() {
+    test(function() {/*
+      i64 op(i64 a, i64 b) {
+        return (a, b);
+      }
+    */}, function() {/*
+      pipeline 0 {
+        b0 {
+          i0 = i64.param 0
+          i1 = i64.param 1
+          i2 = i64.ret ^b0, i1
+        }
+      }
+    */});
+  });
 });
