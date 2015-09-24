@@ -103,4 +103,22 @@ describe('wasm-cfg', function() {
       }
     */});
   });
+
+  it('should support VariableDeclaration and use', function() {
+    test(function() {/*
+      i64 op() {
+        i64 a = i64.const(123);
+        return a;
+      }
+    */}, function() {/*
+      pipeline 0 {
+        b0 {
+          i0 = ssa:store 0, i1
+          i1 = i64.const 123
+          i2 = ssa:load 0
+          i3 = i64.ret ^b0, i2
+        }
+      }
+    */});
+  });
 });
