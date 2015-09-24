@@ -121,4 +121,26 @@ describe('wasm-cfg', function() {
       }
     */});
   });
+
+  it('should support AssignmentExpression', function() {
+    test(function() {/*
+      i64 op() {
+        i64 a;
+        i64 b;
+        a = b = i64.const(1);
+        return a = i64.const(2);
+      }
+    */}, function() {/*
+      pipeline 0 {
+        b0 {
+          i0 = i64.const 1
+          i1 = ssa:store 1, i0
+          i2 = ssa:store 0, i0
+          i3 = i64.const 2
+          i4 = ssa:store 0, i3
+          i5 = i64.ret ^b0, i3
+        }
+      }
+    */});
+  });
 });
