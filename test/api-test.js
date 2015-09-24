@@ -88,7 +88,7 @@ describe('wasm-cfg', function() {
     }, /Mismatched param type/);
   });
 
-  it('should check builtin arg type', function() {
+  it('should support SequenceExpression', function() {
     test(function() {/*
       i64 op(i64 a, i64 b) {
         return (a, b);
