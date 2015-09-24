@@ -66,6 +66,20 @@ describe('wasm-cfg', function() {
     }, /Mismatched param type/);
   });
 
+  it('should allow empty return', function() {
+    test(function() {/*
+      void op() {
+        return;
+      }
+    */}, function() {/*
+      pipeline 0 {
+        b0 {
+          i0 = ret ^b0
+        }
+      }
+    */});
+  });
+
   it('should check builtin result type', function() {
     assert.throws(function() {
       test(function() {/*
