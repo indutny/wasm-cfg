@@ -34,8 +34,8 @@ describe('wasm-cfg', function() {
       pipeline 0 {
         b0 {
           i0 = i64.param ^b0, 0
-          i1 = i64.param ^b0, 1
-          i2 = jump ^b0
+          i1 = i64.param ^i0, 1
+          i2 = jump ^i1
         }
         b0 -> b1
         b1 {
@@ -115,7 +115,7 @@ describe('wasm-cfg', function() {
       pipeline 0 {
         b0 {
           i1 = i64.param ^b0, 1
-          i2 = jump ^b0
+          i2 = jump ^i1
         }
         b0 -> b1
         b1 {
@@ -181,8 +181,8 @@ describe('wasm-cfg', function() {
       pipeline 0 {
         b0 {
           i0 = i64.param ^b0, 0
-          i1 = i64.param ^b0, 1
-          i2 = jump ^b0
+          i1 = i64.param ^i0, 1
+          i2 = jump ^i1
         }
         b0 -> b1
         b1 {
@@ -239,7 +239,7 @@ describe('wasm-cfg', function() {
       pipeline 0 {
         b0 {
           i0 = i64.param ^b0, 0
-          i1 = jump ^b0
+          i1 = jump ^i0
         }
         b0 -> b1
         b1 {
