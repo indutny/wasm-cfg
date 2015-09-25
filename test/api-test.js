@@ -33,12 +33,16 @@ describe('wasm-cfg', function() {
     */}, function() {/*
       pipeline 0 {
         b0 {
-          i0 = i64.param 0
-          i1 = i64.param 1
-          i2 = i64.add i0, i1
-          i3 = i64.const 1
-          i4 = i64.mul i2, i3
-          i5 = i64.ret ^b0, i4
+          i0 = i64.param ^b0, 0
+          i1 = i64.param ^b0, 1
+          i2 = jump ^b0
+        }
+        b0 -> b1
+        b1 {
+          i3 = i64.add i0, i1
+          i4 = i64.const 1
+          i5 = i64.mul i3, i4
+          i6 = i64.ret ^b1, i5
         }
       }
     */});
@@ -110,9 +114,12 @@ describe('wasm-cfg', function() {
     */}, function() {/*
       pipeline 0 {
         b0 {
-          i0 = i64.param 0
-          i1 = i64.param 1
-          i2 = i64.ret ^b0, i1
+          i1 = i64.param ^b0, 1
+          i2 = jump ^b0
+        }
+        b0 -> b1
+        b1 {
+          i0 = i64.ret ^b1, i1
         }
       }
     */});
@@ -173,40 +180,44 @@ describe('wasm-cfg', function() {
     */}, function() {/*
       pipeline 0 {
         b0 {
-          i0 = i64.param 0
-          i1 = i64.bool i0
-          i2 = if ^b0, i1
+          i0 = i64.param ^b0, 0
+          i1 = i64.param ^b0, 1
+          i2 = jump ^b0
         }
-        b0 -> b1, b5
+        b0 -> b1
         b1 {
-          i3 = i64.param 1
-          i4 = i64.bool i3
-          i5 = if ^b1, i4
+          i3 = i64.bool i0
+          i4 = if ^b1, i3
         }
-        b1 -> b2, b3
+        b1 -> b2, b6
         b2 {
-          i6 = i64.const 1
-          i7 = ssa:store 0, i6
-          i8 = jump ^b2
+          i5 = i64.bool i1
+          i6 = if ^b2, i5
         }
-        b2 -> b4
+        b2 -> b3, b4
         b3 {
+          i7 = i64.const 1
+          i8 = ssa:store 0, i7
           i9 = jump ^b3
         }
-        b3 -> b4
+        b3 -> b5
         b4 {
           i10 = jump ^b4
         }
-        b4 -> b6
+        b4 -> b5
         b5 {
-          i11 = i64.const 2
-          i12 = ssa:store 0, i11
-          i13 = jump ^b5
+          i11 = jump ^b5
         }
-        b5 -> b6
+        b5 -> b7
         b6 {
-          i14 = ssa:load 0
-          i15 = i64.ret ^b6, i14
+          i12 = i64.const 2
+          i13 = ssa:store 0, i12
+          i14 = jump ^b6
+        }
+        b6 -> b7
+        b7 {
+          i15 = ssa:load 0
+          i16 = i64.ret ^b7, i15
         }
       }
     */});
@@ -227,36 +238,37 @@ describe('wasm-cfg', function() {
     */}, function() {/*
       pipeline 0 {
         b0 {
-          i0 = i64.param 0
-          i1 = i64.bool i0
-          i2 = if ^b0, i1
+          i0 = i64.param ^b0, 0
+          i1 = jump ^b0
         }
-        b0 -> b1, b5
+        b0 -> b1
         b1 {
-          i3 = i64.param 0
-          i4 = i64.bool i3
-          i5 = if ^b1, i4
+          i2 = i64.bool i0
+          i3 = if ^b1, i2
         }
-        b1 -> b2, b3
+        b1 -> b2, b6
         b2 {
-          i6 = i64.param 0
-          i7 = i64.ret ^b2, i6
+          i4 = i64.bool i0
+          i5 = if ^b2, i4
         }
-        b2 -> b4
+        b2 -> b3, b4
         b3 {
-          i8 = jump ^b3
+          i6 = i64.ret ^b3, i0
         }
-        b3 -> b4
+        b3 -> b5
         b4 {
-          i9 = jump ^b4
+          i7 = jump ^b4
         }
-        b4 -> b6
+        b4 -> b5
         b5 {
-          i10 = i64.param 0
-          i11 = i64.ret ^b5, i10
+          i8 = jump ^b5
         }
-        b5 -> b6
+        b5 -> b7
         b6 {
+          i9 = i64.ret ^b6, i0
+        }
+        b6 -> b7
+        b7 {
         }
       }
     */});
