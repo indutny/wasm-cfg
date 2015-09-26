@@ -16,9 +16,9 @@ function test(source, expected) {
   });
   var cfgs = wasmCFG.build(ast);
 
-  var out = cfgs.map(function(cfg, index) {
-    return cfg.render({ cfg: true }, 'printable')
-              .replace(/pipeline/, 'pipeline ' + index);
+  var out = cfgs.map(function(item, index) {
+    return item.cfg.render({ cfg: true }, 'printable')
+                  .replace(/pipeline/, 'pipeline ' + index);
   }).join('\n');
 
   assertText.equal(out, fixtures.fn2str(expected));
@@ -114,12 +114,13 @@ describe('wasm-cfg', function() {
     */}, function() {/*
       pipeline 0 {
         b0 {
-          i1 = i64.param ^b0, 1
+          i0 = i64.param ^b0, 0
+          i1 = i64.param ^i0, 1
           i2 = jump ^i1
         }
         b0 -> b1
         b1 {
-          i0 = i64.ret ^b1, i1
+          i3 = i64.ret ^b1, i1
         }
       }
     */});
