@@ -17,6 +17,8 @@ function test(source, expected) {
   var cfgs = wasmCFG.build(ast);
 
   var out = cfgs.map(function(item, index) {
+    item.cfg.reindex();
+    item.cfg.link();
     return item.cfg.render({ cfg: true }, 'printable')
                   .replace(/pipeline/, 'pipeline ' + index);
   }).join('\n');
@@ -224,16 +226,14 @@ describe('wasm-cfg', function() {
     */});
   });
 
-  it('should ignore double return', function() {
+  it('should support consequent IfStatements', function() {
     test(function() {/*
-      i64 op(i64 a) {
+      void op(i64 a) {
         if (a) {
-          if (a) {
-            return a;
-          }
         } else {
-          return a;
-          return a;
+        }
+        if (a) {
+        } else {
         }
       }
     */}, function() {/*
@@ -247,30 +247,59 @@ describe('wasm-cfg', function() {
           i2 = i64.bool i0
           i3 = if ^b1, i2
         }
-        b1 -> b2, b6
+        b1 -> b2, b3
         b2 {
-          i4 = i64.bool i0
-          i5 = if ^b2, i4
+          i4 = jump ^b2
         }
-        b2 -> b3, b4
+        b2 -> b4
         b3 {
-          i6 = i64.ret ^b3, i0
+          i5 = jump ^b3
         }
-        b3 -> b5
+        b3 -> b4
         b4 {
-          i7 = jump ^b4
+          i6 = jump ^b4
         }
         b4 -> b5
         b5 {
-          i8 = jump ^b5
+          i7 = i64.bool i0
+          i8 = if ^b5, i7
         }
-        b5 -> b7
+        b5 -> b6, b7
         b6 {
-          i9 = i64.ret ^b6, i0
+          i9 = jump ^b6
         }
-        b6 -> b7
+        b6 -> b8
         b7 {
+          i10 = jump ^b7
         }
+        b7 -> b8
+        b8 {
+          i11 = ret ^b8
+        }
+      }
+    */});
+  });
+
+  it('should generate empty forever loop', function() {
+    test(function() {/*
+      void op() {
+        forever {
+        }
+      }
+    */}, function() {/*
+      pipeline 0 {
+        b0 {
+          i0 = jump ^b0
+        }
+        b0 -> b1
+        b1 {
+          i1 = jump ^b1
+        }
+        b1 -> b2
+        b2 {
+          i2 = jump ^b2
+        }
+        b2 -> b1
       }
     */});
   });
