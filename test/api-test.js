@@ -19,8 +19,10 @@ function test(source, expected) {
   var out = cfgs.map(function(item, index) {
     item.cfg.reindex();
     item.cfg.link();
+    item.cfg.verify();
+
     return item.cfg.render({ cfg: true }, 'printable')
-                  .replace(/pipeline/, 'pipeline ' + index);
+                   .replace(/pipeline/, 'pipeline ' + index);
   }).join('\n');
 
   assertText.equal(out, fixtures.fn2str(expected));
@@ -300,6 +302,183 @@ describe('wasm-cfg', function() {
           i2 = jump ^b2
         }
         b2 -> b1
+      }
+    */});
+  });
+
+  it('should generate forever loop with breaks', function() {
+    test(function() {/*
+      void op() {
+        forever {
+          if (i64.const(1)) break;
+          if (i64.const(2)) break;
+          if (i64.const(3)) break;
+        }
+      }
+    */}, function() {/*
+      pipeline 0 {
+        b0 {
+          i0 = jump ^b0
+        }
+        b0 -> b1
+        b1 {
+          i1 = jump ^b1
+        }
+        b1 -> b2
+        b2 {
+          i2 = i64.const 1
+          i3 = i64.bool i2
+          i4 = if ^b2, i3
+        }
+        b2 -> b3, b5
+        b3 {
+          i5 = jump ^b3
+        }
+        b3 -> b4
+        b4 {
+          i6 = jump ^b4
+        }
+        b4 -> b9
+        b5 {
+          i7 = jump ^b5
+        }
+        b5 -> b6
+        b6 {
+          i8 = jump ^b6
+        }
+        b6 -> b7
+        b7 {
+          i9 = i64.const 2
+          i10 = i64.bool i9
+          i11 = if ^b7, i10
+        }
+        b7 -> b8, b10
+        b8 {
+          i12 = jump ^b8
+        }
+        b8 -> b9
+        b9 {
+          i13 = jump ^b9
+        }
+        b9 -> b14
+        b10 {
+          i14 = jump ^b10
+        }
+        b10 -> b11
+        b11 {
+          i15 = jump ^b11
+        }
+        b11 -> b12
+        b12 {
+          i16 = i64.const 3
+          i17 = i64.bool i16
+          i18 = if ^b12, i17
+        }
+        b12 -> b13, b15
+        b13 {
+          i19 = jump ^b13
+        }
+        b13 -> b14
+        b14 {
+          i20 = ret ^b14
+        }
+        b15 {
+          i21 = jump ^b15
+        }
+        b15 -> b16
+        b16 {
+          i22 = jump ^b16
+        }
+        b16 -> b1
+      }
+    */});
+  });
+
+  it('should generate forever loop with continue', function() {
+    test(function() {/*
+      void op() {
+        forever {
+          if (i64.const(1)) continue;
+          if (i64.const(2)) continue;
+          if (i64.const(3)) continue;
+          return;
+        }
+      }
+    */}, function() {/*
+      pipeline 0 {
+        b0 {
+          i0 = jump ^b0
+        }
+        b0 -> b1
+        b1 {
+          i1 = jump ^b1
+        }
+        b1 -> b2
+        b2 {
+          i2 = jump ^b2
+        }
+        b2 -> b3
+        b3 {
+          i3 = jump ^b3
+        }
+        b3 -> b4
+        b4 {
+          i4 = jump ^b4
+        }
+        b4 -> b5
+        b5 {
+          i5 = i64.const 1
+          i6 = i64.bool i5
+          i7 = if ^b5, i6
+        }
+        b5 -> b6, b7
+        b6 {
+          i8 = jump ^b6
+        }
+        b6 -> b1
+        b7 {
+          i9 = jump ^b7
+        }
+        b7 -> b8
+        b8 {
+          i10 = jump ^b8
+        }
+        b8 -> b9
+        b9 {
+          i11 = i64.const 2
+          i12 = i64.bool i11
+          i13 = if ^b9, i12
+        }
+        b9 -> b10, b11
+        b10 {
+          i14 = jump ^b10
+        }
+        b10 -> b2
+        b11 {
+          i15 = jump ^b11
+        }
+        b11 -> b12
+        b12 {
+          i16 = jump ^b12
+        }
+        b12 -> b13
+        b13 {
+          i17 = i64.const 3
+          i18 = i64.bool i17
+          i19 = if ^b13, i18
+        }
+        b13 -> b14, b15
+        b14 {
+          i20 = jump ^b14
+        }
+        b14 -> b3
+        b15 {
+          i21 = jump ^b15
+        }
+        b15 -> b16
+        b16 {
+          i22 = ret ^b16
+        }
       }
     */});
   });
