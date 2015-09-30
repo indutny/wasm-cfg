@@ -496,32 +496,33 @@ describe('wasm-cfg', function() {
         b0 {
           i0 = ssa:store 0, i1
           i1 = i64.const 1
+          i2 = jump ^b0
         }
         b0 -> b1
         b1 {
-          i2 = jump ^b1
+          i3 = jump ^b1
         }
         b1 -> b2
         b2 {
-          i3 = ssa:load 0
           i4 = ssa:load 0
-          i5 = i64.add i3, i4
-          i6 = ssa:store 0, i5
-          i7 = jump ^b2
+          i5 = ssa:load 0
+          i6 = i64.add i4, i5
+          i7 = ssa:store 0, i6
+          i8 = jump ^b2
         }
         b2 -> b3
         b3 {
-          i8 = ssa:load 0
-          i9 = i64.bool i8
-          i10 = if ^b3, i9
+          i9 = ssa:load 0
+          i10 = i64.bool i9
+          i11 = if ^b3, i10
         }
         b3 -> b4, b5
         b4 {
-          i11 = jump ^b4
+          i12 = jump ^b4
         }
         b4 -> b1
         b5 {
-          i12 = ret ^b5
+          i13 = ret ^b5
         }
       }
     */});
@@ -542,50 +543,51 @@ describe('wasm-cfg', function() {
         b0 {
           i0 = ssa:store 0, i1
           i1 = i64.const 1
+          i2 = jump ^b0
         }
         b0 -> b1
         b1 {
-          i2 = jump ^b1
+          i3 = jump ^b1
         }
         b1 -> b2
         b2 {
-          i3 = ssa:load 0
           i4 = ssa:load 0
-          i5 = i64.add i3, i4
-          i6 = ssa:store 0, i5
-          i7 = i64.const 2
-          i8 = i64.bool i7
-          i9 = if ^b2, i8
+          i5 = ssa:load 0
+          i6 = i64.add i4, i5
+          i7 = ssa:store 0, i6
+          i8 = i64.const 2
+          i9 = i64.bool i8
+          i10 = if ^b2, i9
         }
         b2 -> b3, b4
         b3 {
-          i10 = jump ^b3
+          i11 = jump ^b3
         }
         b3 -> b9
         b4 {
-          i11 = jump ^b4
+          i12 = jump ^b4
         }
         b4 -> b5
         b5 {
-          i12 = jump ^b5
+          i13 = jump ^b5
         }
         b5 -> b6
         b6 {
-          i13 = ssa:load 0
-          i14 = i64.bool i13
-          i15 = if ^b6, i14
+          i14 = ssa:load 0
+          i15 = i64.bool i14
+          i16 = if ^b6, i15
         }
         b6 -> b7, b8
         b7 {
-          i16 = jump ^b7
+          i17 = jump ^b7
         }
         b7 -> b1
         b8 {
-          i17 = jump ^b8
+          i18 = jump ^b8
         }
         b8 -> b9
         b9 {
-          i18 = ret ^b9
+          i19 = ret ^b9
         }
       }
     */});
@@ -606,50 +608,51 @@ describe('wasm-cfg', function() {
         b0 {
           i0 = ssa:store 0, i1
           i1 = i64.const 1
+          i2 = jump ^b0
         }
         b0 -> b1
         b1 {
-          i2 = jump ^b1
+          i3 = jump ^b1
         }
         b1 -> b2
         b2 {
-          i3 = ssa:load 0
           i4 = ssa:load 0
-          i5 = i64.add i3, i4
-          i6 = ssa:store 0, i5
-          i7 = i64.const 2
-          i8 = i64.bool i7
-          i9 = if ^b2, i8
+          i5 = ssa:load 0
+          i6 = i64.add i4, i5
+          i7 = ssa:store 0, i6
+          i8 = i64.const 2
+          i9 = i64.bool i8
+          i10 = if ^b2, i9
         }
         b2 -> b3, b4
         b3 {
-          i10 = jump ^b3
+          i11 = jump ^b3
         }
         b3 -> b6
         b4 {
-          i11 = jump ^b4
+          i12 = jump ^b4
         }
         b4 -> b5
         b5 {
-          i12 = jump ^b5
+          i13 = jump ^b5
         }
         b5 -> b6
         b6 {
-          i13 = jump ^b6
+          i14 = jump ^b6
         }
         b6 -> b7
         b7 {
-          i14 = ssa:load 0
-          i15 = i64.bool i14
-          i16 = if ^b7, i15
+          i15 = ssa:load 0
+          i16 = i64.bool i15
+          i17 = if ^b7, i16
         }
         b7 -> b8, b9
         b8 {
-          i17 = jump ^b8
+          i18 = jump ^b8
         }
         b8 -> b1
         b9 {
-          i18 = ret ^b9
+          i19 = ret ^b9
         }
       }
     */});
