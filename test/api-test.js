@@ -44,7 +44,7 @@ describe('wasm-cfg', function() {
         b0 -> b1
         b1 {
           i3 = i64.add i0, i1
-          i4 = i64.const 1
+          i4 = i64.const "1"
           i5 = i64.mul i3, i4
           i6 = i64.ret ^b1, i5
         }
@@ -140,7 +140,7 @@ describe('wasm-cfg', function() {
       pipeline 0 {
         b0 {
           i0 = ssa:store 0, i1
-          i1 = i64.const 123
+          i1 = i64.const "7b"
           i2 = ssa:load 0
           i3 = i64.ret ^b0, i2
         }
@@ -159,10 +159,10 @@ describe('wasm-cfg', function() {
     */}, function() {/*
       pipeline 0 {
         b0 {
-          i0 = i64.const 1
+          i0 = i64.const "1"
           i1 = ssa:store 1, i0
           i2 = ssa:store 0, i0
-          i3 = i64.const 2
+          i3 = i64.const "2"
           i4 = ssa:store 0, i3
           i5 = i64.ret ^b0, i3
         }
@@ -201,7 +201,7 @@ describe('wasm-cfg', function() {
         }
         b2 -> b3, b4
         b3 {
-          i7 = i64.const 1
+          i7 = i64.const "1"
           i8 = ssa:store 0, i7
           i9 = jump ^b3
         }
@@ -215,7 +215,7 @@ describe('wasm-cfg', function() {
         }
         b5 -> b7
         b6 {
-          i12 = i64.const 2
+          i12 = i64.const "2"
           i13 = ssa:store 0, i12
           i14 = jump ^b6
         }
@@ -326,7 +326,7 @@ describe('wasm-cfg', function() {
         }
         b1 -> b2
         b2 {
-          i2 = i64.const 1
+          i2 = i64.const "1"
           i3 = i64.bool i2
           i4 = if ^b2, i3
         }
@@ -348,7 +348,7 @@ describe('wasm-cfg', function() {
         }
         b6 -> b7
         b7 {
-          i9 = i64.const 2
+          i9 = i64.const "2"
           i10 = i64.bool i9
           i11 = if ^b7, i10
         }
@@ -370,7 +370,7 @@ describe('wasm-cfg', function() {
         }
         b11 -> b12
         b12 {
-          i16 = i64.const 3
+          i16 = i64.const "3"
           i17 = i64.bool i16
           i18 = if ^b12, i17
         }
@@ -427,7 +427,7 @@ describe('wasm-cfg', function() {
         }
         b4 -> b5
         b5 {
-          i5 = i64.const 1
+          i5 = i64.const "1"
           i6 = i64.bool i5
           i7 = if ^b5, i6
         }
@@ -445,7 +445,7 @@ describe('wasm-cfg', function() {
         }
         b8 -> b9
         b9 {
-          i11 = i64.const 2
+          i11 = i64.const "2"
           i12 = i64.bool i11
           i13 = if ^b9, i12
         }
@@ -463,7 +463,7 @@ describe('wasm-cfg', function() {
         }
         b12 -> b13
         b13 {
-          i17 = i64.const 3
+          i17 = i64.const "3"
           i18 = i64.bool i17
           i19 = if ^b13, i18
         }
@@ -495,7 +495,7 @@ describe('wasm-cfg', function() {
       pipeline 0 {
         b0 {
           i0 = ssa:store 0, i1
-          i1 = i64.const 1
+          i1 = i64.const "1"
           i2 = jump ^b0
         }
         b0 -> b1
@@ -542,7 +542,7 @@ describe('wasm-cfg', function() {
       pipeline 0 {
         b0 {
           i0 = ssa:store 0, i1
-          i1 = i64.const 1
+          i1 = i64.const "1"
           i2 = jump ^b0
         }
         b0 -> b1
@@ -555,7 +555,7 @@ describe('wasm-cfg', function() {
           i5 = ssa:load 0
           i6 = i64.add i4, i5
           i7 = ssa:store 0, i6
-          i8 = i64.const 2
+          i8 = i64.const "2"
           i9 = i64.bool i8
           i10 = if ^b2, i9
         }
@@ -607,7 +607,7 @@ describe('wasm-cfg', function() {
       pipeline 0 {
         b0 {
           i0 = ssa:store 0, i1
-          i1 = i64.const 1
+          i1 = i64.const "1"
           i2 = jump ^b0
         }
         b0 -> b1
@@ -620,7 +620,7 @@ describe('wasm-cfg', function() {
           i5 = ssa:load 0
           i6 = i64.add i4, i5
           i7 = ssa:store 0, i6
-          i8 = i64.const 2
+          i8 = i64.const "2"
           i9 = i64.bool i8
           i10 = if ^b2, i9
         }
@@ -653,6 +653,21 @@ describe('wasm-cfg', function() {
         b8 -> b1
         b9 {
           i19 = ret ^b9
+        }
+      }
+    */});
+  });
+
+  it('should provide floating point constants', function() {
+    test(function() {/*
+      f64 op() {
+        return f64.const(123.456);
+      }
+    */}, function() {/*
+      pipeline 0 {
+        b0 {
+          i0 = f64.const 123.456
+          i1 = f64.ret ^b0, i0
         }
       }
     */});
