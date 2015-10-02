@@ -711,10 +711,8 @@ describe('wasm-cfg', function() {
         b0 -> b1
         b1 {
           i2 = i32.wrap i0
-          i3 = i32.pushArg ^b1, i2
-          i4 = i64.pushArg ^i3, i0
-          i5 = i64.call ^i4, 1, 2
-          i6 = i64.ret ^i5, i5
+          i3 = i64.call ^b1, 1, "i64", "i32", i0, i2
+          i4 = i64.ret ^i3, i3
         }
       }
 
