@@ -672,4 +672,25 @@ describe('wasm-cfg', function() {
       }
     */});
   });
+
+  it('should make stores/loads control nodes', function() {
+    test(function() {/*
+      i64 op(i64 off) {
+        return i64.load(addr.from_i64(off));
+      }
+    */}, function() {/*
+      pipeline 0 {
+        b0 {
+          i0 = i64.param ^b0, 0
+          i1 = jump ^i0
+        }
+        b0 -> b1
+        b1 {
+          i2 = addr.from_i64 i0
+          i3 = i64.load ^b1, i2
+          i4 = i64.ret ^i3, i3
+        }
+      }
+    */});
+  });
 });
