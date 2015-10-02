@@ -693,4 +693,42 @@ describe('wasm-cfg', function() {
       }
     */});
   });
+
+  it('should support direct calls', function() {
+    test(function() {/*
+      i64 op(i64 off) {
+        return test(off, i32.wrap(off));
+      }
+      i64 test(i64 a, i32 b) {
+        return a;
+      }
+    */}, function() {/*
+      pipeline 0 {
+        b0 {
+          i0 = i64.param ^b0, 0
+          i1 = jump ^i0
+        }
+        b0 -> b1
+        b1 {
+          i2 = i32.wrap i0
+          i3 = pushArg ^b1, i2
+          i4 = pushArg ^i3, i0
+          i5 = call ^i4, 1, 2
+          i6 = i64.ret ^i5, i5
+        }
+      }
+
+      pipeline 1 {
+        b0 {
+          i0 = i64.param ^b0, 0
+          i1 = i32.param ^i0, 1
+          i2 = jump ^i1
+        }
+        b0 -> b1
+        b1 {
+          i3 = i64.ret ^b1, i0
+        }
+      }
+    */});
+  });
 });
