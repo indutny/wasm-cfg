@@ -47,6 +47,7 @@ describe('wasm-cfg', function() {
           i4 = i64.const "1"
           i5 = i64.mul i3, i4
           i6 = i64.ret ^b1, i5
+          i7 = ret ^i6
         }
       }
     */});
@@ -125,6 +126,7 @@ describe('wasm-cfg', function() {
         b0 -> b1
         b1 {
           i3 = i64.ret ^b1, i1
+          i4 = ret ^i3
         }
       }
     */});
@@ -143,6 +145,7 @@ describe('wasm-cfg', function() {
           i1 = i64.const "7b"
           i2 = ssa:load 0
           i3 = i64.ret ^b0, i2
+          i4 = ret ^i3
         }
       }
     */});
@@ -165,6 +168,7 @@ describe('wasm-cfg', function() {
           i3 = i64.const "2"
           i4 = ssa:store 0, i3
           i5 = i64.ret ^b0, i3
+          i6 = ret ^i5
         }
       }
     */});
@@ -223,6 +227,7 @@ describe('wasm-cfg', function() {
         b7 {
           i15 = ssa:load 0
           i16 = i64.ret ^b7, i15
+          i17 = ret ^i16
         }
       }
     */});
@@ -668,6 +673,7 @@ describe('wasm-cfg', function() {
         b0 {
           i0 = f64.const 123.456
           i1 = f64.ret ^b0, i0
+          i2 = ret ^i1
         }
       }
     */});
@@ -689,6 +695,7 @@ describe('wasm-cfg', function() {
           i2 = addr.from_i64 i0
           i3 = i64.load ^b1, i2
           i4 = i64.ret ^i3, i3
+          i5 = ret ^i4
         }
       }
     */});
@@ -713,6 +720,7 @@ describe('wasm-cfg', function() {
           i2 = i32.wrap i0
           i3 = i64.call ^b1, 1, "i64", "i32", i0, i2
           i4 = i64.ret ^i3, i3
+          i5 = ret ^i4
         }
       }
 
@@ -725,6 +733,7 @@ describe('wasm-cfg', function() {
         b0 -> b1
         b1 {
           i3 = i64.ret ^b1, i0
+          i4 = ret ^i3
         }
       }
     */});
