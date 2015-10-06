@@ -521,9 +521,13 @@ describe('wasm-cfg', function() {
           i10 = i64.bool i9
           i11 = if ^b3, i10
         }
-        b3 -> b1, b4
+        b3 -> b4, b5
         b4 {
-          i12 = ret ^b4
+          i12 = jump ^b4
+        }
+        b4 -> b1
+        b5 {
+          i13 = ret ^b5
         }
       }
     */});
@@ -564,7 +568,7 @@ describe('wasm-cfg', function() {
         b3 {
           i11 = jump ^b3
         }
-        b3 -> b8
+        b3 -> b9
         b4 {
           i12 = jump ^b4
         }
@@ -578,13 +582,17 @@ describe('wasm-cfg', function() {
           i15 = i64.bool i14
           i16 = if ^b6, i15
         }
-        b6 -> b1, b7
+        b6 -> b7, b8
         b7 {
           i17 = jump ^b7
         }
-        b7 -> b8
+        b7 -> b1
         b8 {
-          i18 = ret ^b8
+          i18 = jump ^b8
+        }
+        b8 -> b9
+        b9 {
+          i19 = ret ^b9
         }
       }
     */});
@@ -643,9 +651,13 @@ describe('wasm-cfg', function() {
           i16 = i64.bool i15
           i17 = if ^b7, i16
         }
-        b7 -> b1, b8
+        b7 -> b8, b9
         b8 {
-          i18 = ret ^b8
+          i18 = jump ^b8
+        }
+        b8 -> b1
+        b9 {
+          i19 = ret ^b9
         }
       }
     */});
