@@ -687,15 +687,18 @@ describe('wasm-cfg', function() {
     */}, function() {/*
       pipeline 0 {
         b0 {
-          i0 = i64.param ^b0, 0
-          i1 = jump ^i0
+          i0 = memory
+          i1 = ssa:store 0, i0
+          i2 = i64.param ^b0, 0
+          i3 = jump ^i2
         }
         b0 -> b1
         b1 {
-          i2 = addr.from_i64 i0
-          i3 = i64.load ^b1, i2
-          i4 = i64.ret ^i3, i3
-          i5 = ret ^i4
+          i4 = addr.from_i64 i2
+          i5 = ssa:load 0
+          i6 = i64.load i5, i4
+          i7 = i64.ret ^b1, i6
+          i8 = ret ^i7
         }
       }
     */});
@@ -712,15 +715,20 @@ describe('wasm-cfg', function() {
     */}, function() {/*
       pipeline 0 {
         b0 {
-          i0 = i64.param ^b0, 0
-          i1 = jump ^i0
+          i0 = memory
+          i1 = ssa:store 0, i0
+          i2 = i64.param ^b0, 0
+          i3 = jump ^i2
         }
         b0 -> b1
         b1 {
-          i2 = i32.wrap i0
-          i3 = i64.call ^b1, 1, "i64", "i32", i0, i2
-          i4 = i64.ret ^i3, i3
-          i5 = ret ^i4
+          i4 = ssa:load 0
+          i5 = i32.wrap i2
+          i6 = i64.call ^b1, 1, "i64", "i32", i4, i2, i5
+          i7 = memory ^i6
+          i8 = ssa:store 0, i7
+          i9 = i64.ret ^i7, i6
+          i10 = ret ^i9
         }
       }
 
