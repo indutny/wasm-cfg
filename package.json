@@ -1,6 +1,6 @@
 {
   "name": "wasm-cfg",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "WebAssembly AST->CFG translator",
   "main": "lib/wasm-cfg.js",
   "scripts": {
