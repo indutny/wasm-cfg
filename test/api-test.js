@@ -682,6 +682,7 @@ describe('wasm-cfg', function() {
   it('should make stores/loads control nodes', function() {
     test(function() {/*
       i64 op(i64 off) {
+        i64.store(addr.from_i64(off), off);
         return i64.load(addr.from_i64(off));
       }
     */}, function() {/*
@@ -696,9 +697,13 @@ describe('wasm-cfg', function() {
         b1 {
           i4 = addr.from_i64 i2
           i5 = ssa:load 0
-          i6 = i64.load i5, i4
-          i7 = i64.ret ^b1, i6
-          i8 = ret ^i7
+          i6 = i64.store ^b1, i5, i4, i2
+          i7 = ssa:store 0, i6
+          i8 = addr.from_i64 i2
+          i9 = ssa:load 0
+          i10 = i64.load i9, i8
+          i11 = i64.ret ^i6, i10
+          i12 = ret ^i11
         }
       }
     */});
