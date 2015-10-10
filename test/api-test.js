@@ -47,7 +47,7 @@ describe('wasm-cfg', function() {
           i4 = i64.const "1"
           i5 = i64.mul i3, i4
           i6 = i64.ret ^b1, i5
-          i7 = ret ^i6
+          i7 = exit ^i6
         }
       }
     */});
@@ -83,7 +83,7 @@ describe('wasm-cfg', function() {
     */}, function() {/*
       pipeline 0 {
         b0 {
-          i0 = ret ^b0
+          i0 = exit ^b0
         }
       }
     */});
@@ -126,7 +126,7 @@ describe('wasm-cfg', function() {
         b0 -> b1
         b1 {
           i3 = i64.ret ^b1, i1
-          i4 = ret ^i3
+          i4 = exit ^i3
         }
       }
     */});
@@ -141,11 +141,11 @@ describe('wasm-cfg', function() {
     */}, function() {/*
       pipeline 0 {
         b0 {
-          i0 = ssa:store 0, i1
-          i1 = i64.const "7b"
+          i0 = i64.const "7b"
+          i1 = ssa:store 0, i0
           i2 = ssa:load 0
           i3 = i64.ret ^b0, i2
-          i4 = ret ^i3
+          i4 = exit ^i3
         }
       }
     */});
@@ -168,7 +168,7 @@ describe('wasm-cfg', function() {
           i3 = i64.const "2"
           i4 = ssa:store 0, i3
           i5 = i64.ret ^b0, i3
-          i6 = ret ^i5
+          i6 = exit ^i5
         }
       }
     */});
@@ -227,7 +227,7 @@ describe('wasm-cfg', function() {
         b7 {
           i15 = ssa:load 0
           i16 = i64.ret ^b7, i15
-          i17 = ret ^i16
+          i17 = exit ^i16
         }
       }
     */});
@@ -281,7 +281,7 @@ describe('wasm-cfg', function() {
         }
         b7 -> b8
         b8 {
-          i11 = ret ^b8
+          i11 = exit ^b8
         }
       }
     */});
@@ -385,7 +385,7 @@ describe('wasm-cfg', function() {
         }
         b13 -> b14
         b14 {
-          i20 = ret ^b14
+          i20 = exit ^b14
         }
         b15 {
           i21 = jump ^b15
@@ -482,7 +482,7 @@ describe('wasm-cfg', function() {
         }
         b15 -> b16
         b16 {
-          i22 = ret ^b16
+          i22 = exit ^b16
         }
       }
     */});
@@ -499,8 +499,8 @@ describe('wasm-cfg', function() {
     */}, function() {/*
       pipeline 0 {
         b0 {
-          i0 = ssa:store 0, i1
-          i1 = i64.const "1"
+          i0 = i64.const "1"
+          i1 = ssa:store 0, i0
           i2 = jump ^b0
         }
         b0 -> b1
@@ -527,7 +527,7 @@ describe('wasm-cfg', function() {
         }
         b4 -> b1
         b5 {
-          i13 = ret ^b5
+          i13 = exit ^b5
         }
       }
     */});
@@ -546,8 +546,8 @@ describe('wasm-cfg', function() {
     */}, function() {/*
       pipeline 0 {
         b0 {
-          i0 = ssa:store 0, i1
-          i1 = i64.const "1"
+          i0 = i64.const "1"
+          i1 = ssa:store 0, i0
           i2 = jump ^b0
         }
         b0 -> b1
@@ -592,7 +592,7 @@ describe('wasm-cfg', function() {
         }
         b8 -> b9
         b9 {
-          i19 = ret ^b9
+          i19 = exit ^b9
         }
       }
     */});
@@ -611,8 +611,8 @@ describe('wasm-cfg', function() {
     */}, function() {/*
       pipeline 0 {
         b0 {
-          i0 = ssa:store 0, i1
-          i1 = i64.const "1"
+          i0 = i64.const "1"
+          i1 = ssa:store 0, i0
           i2 = jump ^b0
         }
         b0 -> b1
@@ -657,7 +657,7 @@ describe('wasm-cfg', function() {
         }
         b8 -> b1
         b9 {
-          i19 = ret ^b9
+          i19 = exit ^b9
         }
       }
     */});
@@ -673,7 +673,7 @@ describe('wasm-cfg', function() {
         b0 {
           i0 = f64.const 123.456
           i1 = f64.ret ^b0, i0
-          i2 = ret ^i1
+          i2 = exit ^i1
         }
       }
     */});
@@ -688,7 +688,7 @@ describe('wasm-cfg', function() {
     */}, function() {/*
       pipeline 0 {
         b0 {
-          i0 = memory
+          i0 = state
           i1 = ssa:store 0, i0
           i2 = i64.param ^b0, 0
           i3 = jump ^i2
@@ -698,12 +698,13 @@ describe('wasm-cfg', function() {
           i4 = addr.from_i64 i2
           i5 = ssa:load 0
           i6 = i64.store ^b1, i5, i4, i2
-          i7 = ssa:store 0, i6
-          i8 = addr.from_i64 i2
-          i9 = ssa:load 0
-          i10 = i64.load i9, i8
-          i11 = i64.ret ^i6, i10
-          i12 = ret ^i11
+          i7 = updateState ^i6, 2, i5
+          i8 = ssa:store 0, i7
+          i9 = addr.from_i64 i2
+          i10 = ssa:load 0
+          i11 = i64.load ^b1, i10, i9
+          i12 = i64.ret ^b1, i11
+          i13 = exit ^i12
         }
       }
     */});
@@ -720,7 +721,7 @@ describe('wasm-cfg', function() {
     */}, function() {/*
       pipeline 0 {
         b0 {
-          i0 = memory
+          i0 = state
           i1 = ssa:store 0, i0
           i2 = i64.param ^b0, 0
           i3 = jump ^i2
@@ -730,10 +731,10 @@ describe('wasm-cfg', function() {
           i4 = ssa:load 0
           i5 = i32.wrap i2
           i6 = i64.call ^b1, 1, "i64", "i32", i4, i2, i5
-          i7 = memory ^i6
+          i7 = updateState ^i6, 4, i4
           i8 = ssa:store 0, i7
-          i9 = i64.ret ^i7, i6
-          i10 = ret ^i9
+          i9 = i64.ret ^b1, i6
+          i10 = exit ^i9
         }
       }
 
@@ -746,7 +747,7 @@ describe('wasm-cfg', function() {
         b0 -> b1
         b1 {
           i3 = i64.ret ^b1, i0
-          i4 = ret ^i3
+          i4 = exit ^i3
         }
       }
     */});
