@@ -731,7 +731,7 @@ describe('wasm-cfg', function() {
           i4 = ssa:load 0
           i5 = i32.wrap i2
           i6 = i64.call ^b1, 1, "i64", "i32", i4, i2, i5
-          i7 = updateState ^i6, 4, i4
+          i7 = updateState ^i6, 14, i4
           i8 = ssa:store 0, i7
           i9 = i64.ret ^b1, i6
           i10 = exit ^i9
