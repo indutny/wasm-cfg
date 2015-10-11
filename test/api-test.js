@@ -5,7 +5,6 @@ var assertText = require('assert-text');
 assertText.options.trim = true;
 var fixtures = require('./fixtures');
 
-// TODO(indutny): dev dependency
 var wasmAST = require('wasm-ast');
 
 var wasmCFG = require('../');
@@ -753,9 +752,9 @@ describe('wasm-cfg', function() {
     */});
   });
 
-  it('should enforce i8 type for booleans', function() {
+  it('should enforce i32 type for booleans', function() {
     test(function() {/*
-      i8 op(i64 a, i64 b) {
+      i32 op(i64 a, i64 b) {
         return i64.eq(a, b);
       }
     */}, function() {/*
@@ -768,7 +767,7 @@ describe('wasm-cfg', function() {
         b0 -> b1
         b1 {
           i3 = i64.eq i0, i1
-          i4 = i8.ret ^b1, i3
+          i4 = i32.ret ^b1, i3
           i5 = exit ^i4
         }
       }
