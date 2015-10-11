@@ -97,7 +97,7 @@ describe('wasm-cfg', function() {
         }
       */}, function() {/*
       */});
-    }, /Builtin return type mismatch/);
+    }, /Builtin: i64.mul return type mismatch/);
   });
 
   it('should check builtin arg type', function() {
