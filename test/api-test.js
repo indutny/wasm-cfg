@@ -752,4 +752,26 @@ describe('wasm-cfg', function() {
       }
     */});
   });
+
+  it('should enforce i8 type for booleans', function() {
+    test(function() {/*
+      i8 op(i64 a, i64 b) {
+        return i64.eq(a, b);
+      }
+    */}, function() {/*
+      pipeline 0 {
+        b0 {
+          i0 = i64.param ^b0, 0
+          i1 = i64.param ^i0, 1
+          i2 = jump ^i1
+        }
+        b0 -> b1
+        b1 {
+          i3 = i64.eq i0, i1
+          i4 = i8.ret ^b1, i3
+          i5 = exit ^i4
+        }
+      }
+    */});
+  });
 });
