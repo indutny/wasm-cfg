@@ -682,8 +682,8 @@ describe('wasm-cfg', function() {
   it('should make stores/loads control nodes', function() {
     test(function() {/*
       i64 op(i64 off) {
-        i64.store(addr.from_i64(off), off);
-        return i64.load(addr.from_i64(off));
+        i64.store(addr.from_64(off), off);
+        return i64.load(addr.from_64(off));
       }
     */}, function() {/*
       pipeline 0 {
@@ -695,12 +695,12 @@ describe('wasm-cfg', function() {
         }
         b0 -> b1
         b1 {
-          i4 = addr.from_i64 i2
+          i4 = addr.from_64 i2
           i5 = ssa:load 0
           i6 = i64.store ^b1, i5, i4, i2
           i7 = updateState ^i6, 2, i5
           i8 = ssa:store 0, i7
-          i9 = addr.from_i64 i2
+          i9 = addr.from_64 i2
           i10 = ssa:load 0
           i11 = i64.load ^b1, i10, i9
           i12 = i64.ret ^b1, i11
