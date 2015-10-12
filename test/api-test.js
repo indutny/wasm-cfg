@@ -710,7 +710,6 @@ describe('wasm-cfg', function() {
   });
 
   it('should support direct calls', function() {
-    // jscs:disable maximumLineLength
     test(function() {/*
       i64 op(i64 off) {
         return test(off, i32.wrap(off));
@@ -730,7 +729,7 @@ describe('wasm-cfg', function() {
         b1 {
           i4 = ssa:load 0
           i5 = i32.wrap i2
-          i6 = i64.call ^b1, {"type":"direct","index":1}, "i64", "i32", i4, i2, i5
+          i6 = i64.call ^b1, {"module":null,"index":1}, "i64", "i32", i4, i2, i5
           i7 = updateState ^i6, 14, i4
           i8 = ssa:store 0, i7
           i9 = i64.ret ^b1, i6
@@ -751,7 +750,6 @@ describe('wasm-cfg', function() {
         }
       }
     */});
-    // jscs:enable maximumLineLength
   });
 
   it('should enforce i32 type for booleans', function() {
