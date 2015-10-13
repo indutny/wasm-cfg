@@ -9,11 +9,22 @@ var wasmAST = require('wasm-ast');
 
 var wasmCFG = require('../');
 
+var table = {
+  get: function(module, name) {
+    if (module === 'std' && name === 'resize_memory') {
+      return {
+        index: 13,
+        signature: new wasmCFG.Signature('void', [ 'addr' ])
+      };
+    }
+  }
+};
+
 function test(source, expected) {
   var ast = wasmAST.parse(fixtures.fn2str(source), {
     index: true
   });
-  var cfgs = wasmCFG.build(ast);
+  var cfgs = wasmCFG.build(ast, table);
 
   var out = cfgs.map(function(item, index) {
     item.cfg.reindex();
@@ -709,6 +720,28 @@ describe('wasm-cfg', function() {
     */});
   });
 
+  it('should enforce i32 type for booleans', function() {
+    test(function() {/*
+      i32 op(i64 a, i64 b) {
+        return i64.eq(a, b);
+      }
+    */}, function() {/*
+      pipeline 0 {
+        b0 {
+          i0 = i64.param ^b0, 0
+          i1 = i64.param ^i0, 1
+          i2 = jump ^i1
+        }
+        b0 -> b1
+        b1 {
+          i3 = i64.eq i0, i1
+          i4 = i32.ret ^b1, i3
+          i5 = exit ^i4
+        }
+      }
+    */});
+  });
+
   it('should support direct calls', function() {
     test(function() {/*
       i64 op(i64 off) {
@@ -752,23 +785,27 @@ describe('wasm-cfg', function() {
     */});
   });
 
-  it('should enforce i32 type for booleans', function() {
+  it('should support imported calls', function() {
     test(function() {/*
-      i32 op(i64 a, i64 b) {
-        return i64.eq(a, b);
+      void main(i64 off) {
+        std::resize_memory(addr.from_64(off));
       }
     */}, function() {/*
       pipeline 0 {
         b0 {
-          i0 = i64.param ^b0, 0
-          i1 = i64.param ^i0, 1
-          i2 = jump ^i1
+          i0 = state
+          i1 = ssa:store 0, i0
+          i2 = i64.param ^b0, 0
+          i3 = jump ^i2
         }
         b0 -> b1
         b1 {
-          i3 = i64.eq i0, i1
-          i4 = i32.ret ^b1, i3
-          i5 = exit ^i4
+          i4 = ssa:load 0
+          i5 = addr.from_64 i2
+          i6 = void.call ^b1, {"module":"std","index":13}, "addr", i4, i5
+          i7 = updateState ^i6, 14, i4
+          i8 = ssa:store 0, i7
+          i9 = exit ^b1
         }
       }
     */});
